@@ -31,7 +31,7 @@ app.get('/addEmployee', (req, res)=> {
 
 app.get('/', (req, res)=> {
     // res.send('<h1>Welcome to the Employees API</h1>')
-    res.sendFile(path.join(__dirname, 'frontend', 'viewEmp.html'));
+    res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
 })
 
 app.get('/', (req, res)=> {
