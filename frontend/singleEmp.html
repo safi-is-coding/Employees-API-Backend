@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex; /* Use flexbox */
+            flex-wrap: wrap; /* Allow items to wrap */
+        }
+
+        .image-container {
+            text-align: center;
+            margin-right: 20px;
+            margin-bottom: 20px; /* Add margin bottom for spacing */
+        }
+
+        .image-container img {
+            width: 200px;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .details-container {
+            flex: 1; /* Take remaining space */
+            padding-left: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 24px;
+            color: green;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin: 5px 0;
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* Responsive adjustments */
+        @media screen and (max-width: 600px) {
+            .container {
+                margin: 30px;
+                padding: 10px; /* Adjust padding */
+            }
+
+            .image-container {
+                margin-right: 0; /* Remove right margin */
+            }
+
+            .details-container {
+                padding-left: 0; /* Remove left padding */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="image-container" id="image-container"></div>
+        <div class="details-container" id="details-container"></div>
+    </div>
+
+    <script>
+        // Extract employee ID from URL query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const employeeId = urlParams.get('id');
+
+        // Fetch employee details by ID
+        async function fetchEmployeeDetails() {
+            try {
+                const response = await fetch(`/api/employees/${employeeId}`);
+                const employee = await response.json();
+                return employee;
+            } catch (error) {
+                console.error('Error:', error);
+                return null;
+            }
+        }
+
+        // Render employee details
+        async function renderEmployeeDetails() {
+            const imageContainer = document.getElementById('image-container');
+            const detailsContainer = document.getElementById('details-container');
+
+            const employee = await fetchEmployeeDetails();
+            if (!employee) {
+                detailsContainer.innerHTML = '<p>Employee details not found.</p>';
+                return;
+            }
+
+            // Display employee details
+            imageContainer.innerHTML = `<img src="${employee.empImage}" alt="${employee.name}">`;
+            detailsContainer.innerHTML = `
+                <h2>${employee.name}</h2>
+                <p>Email: ${employee.email}</p>
+                <p>DOB: ${employee.DOB}</p>
+                <p>Salary: ${employee.salary}</p>
+                <p>Experience: ${employee.experience}</p>
+                <p>Joining Date: ${employee.createdAt.slice(0, 10)}</p>
+                <p>Update Date: ${employee.updatedAt.slice(0, 10)}</p>
+            `;
+        }
+
+        // Call renderEmployeeDetails function when the page loads
+        window.addEventListener('load', renderEmployeeDetails);
+    </script>
+</body>
+</html>

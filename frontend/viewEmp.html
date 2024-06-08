@@ -1,0 +1,320 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System</title>
+    <style>
+        /* Add your CSS styles for the employee cards here */
+        #employees-container{
+            background-color: whitesmoke;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 80%;
+            margin: auto auto;
+            padding: 5%;
+        }
+        .employee-card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            width: 300px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .employee-card img {
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .employee-card h2 {
+            margin-top: 0;
+            color: green;
+        }
+
+        .employee-card p {
+            margin: 5px 0;
+            color: brown;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h1>All Employees</h1>
+    <div id="employees-container"></div>
+
+    <script>
+        // Fetch employees data from backend API
+        async function fetchEmployees() {
+            try {
+                const response = await fetch('/api/employees');
+                const employees = await response.json();
+                return employees;
+            } catch (error) {
+                console.error('Error:', error);
+                return [];
+            }
+        }
+
+        // Render employee cards
+        async function renderEmployees() {
+            const employeesContainer = document.getElementById('employees-container');
+            employeesContainer.innerHTML = ''; // Clear previous content
+
+            const employees = await fetchEmployees();
+            if (employees.length === 0) {
+                employeesContainer.innerHTML = '<p>No employees found.</p>';
+                return;
+            }
+
+            employees.forEach(employee => {
+                const card = document.createElement('div');
+                card.classList.add('employee-card');
+
+                // Add employee details to card
+                card.innerHTML = `
+                    <img src="${employee.empImage}" alt="${employee.name}">
+                    <h2>${employee.name}</h2>
+                    <p>Email: ${employee.email}</p>
+                    <p>DOB: ${employee.DOB}</p>
+                    <p>Salary: ${employee.salary}</p>
+                    <p>Experience: ${employee.experience}</p>
+                `;
+
+                employeesContainer.appendChild(card);
+            });
+        }
+
+        // Call renderEmployees function when the page loads
+        window.addEventListener('load', renderEmployees);
+    </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System</title>
+    <style>
+        /* CSS styles for employee cards */
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        nav {
+            background-color: #ffc400;
+            color: black;
+            padding: 20px;
+            text-align: center;
+        }
+
+        nav h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .search-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        #search-input {
+            flex-grow: .4;
+            padding: 15px;
+            width: 50%;
+            height: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            outline: none;
+        }
+
+        #addEmp {
+            flex-grow: .3;
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background-color 0.3s ease;
+        }
+
+        #addEmp:hover {
+            background-color: #0056b3;
+        }
+
+        #employees-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .employee-card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px;
+            width: calc(20% - 20px);
+            background-color: #fff;
+            transition: transform 0.3s ease;
+        }
+
+        .employee-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .employee-card img {
+            width: 100%;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .employee-card-info {
+            padding: 20px;
+        }
+
+        .employee-card h2 {
+            margin-top: 0;
+            font-size: 20px;
+            color: darkgreen;
+        }
+
+
+        @media (max-width: 768px) {
+            .search-bar {
+                flex-direction: column-reverse;
+            }
+            #search-input{
+                width: 100%;
+            }
+            #addEmp {
+                width: 50%;
+                font-size: 1rem;
+                margin-bottom: 10px;
+            }
+
+            #employees-container {
+                justify-content: flex-start;
+            }
+
+            .employee-card {
+                width: calc(50% - 20px);
+            }
+        }
+
+        
+    </style>
+</head>
+<body>
+<nav>
+    <h1>All Employees Details</h1>
+</nav>
+<div class="container">
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search by name...">
+        <button id="addEmp">Add Employee</button>
+    </div>
+    <div id="employees-container"></div>
+</div>
+
+<script>
+    // Fetch employees data from backend API
+    async function fetchEmployees() {
+        try {
+            const response = await fetch('/api/employees');
+            const employees = await response.json();
+            return employees;
+        } catch (error) {
+            console.error('Error:', error);
+            return [];
+        }
+    }
+
+    // Render employee cards based on search query
+    async function renderEmployees(searchQuery = '') {
+        const employeesContainer = document.getElementById('employees-container');
+        employeesContainer.innerHTML = ''; // Clear previous content
+
+        const employees = await fetchEmployees();
+        if (employees.length === 0) {
+            employeesContainer.innerHTML = '<p>No employees found.</p>';
+            return;
+        }
+
+        employees.forEach(employee => {
+            // Filter employees based on search query
+            const employeeName = employee.name.toLowerCase();
+            if (employeeName.includes(searchQuery.toLowerCase())) {
+                const card = document.createElement('div');
+                card.classList.add('employee-card');
+
+                // Add employee details to card
+                card.innerHTML = `
+                        <img src="${employee.empImage}" alt="${employee.name}">
+                        <div class="employee-card-info">
+                            <h2>${employee.name}</h2>
+                        </div>
+                    `;
+
+                // Add click event listener to navigate to employee details page
+                card.addEventListener('click', () => {
+                    window.location.href = `/singleEmp.html?id=${employee._id}`;
+                });
+
+                employeesContainer.appendChild(card);
+            }
+        });
+
+        if (employeesContainer.children.length === 0) {
+            employeesContainer.innerHTML = '<p>No matching employees found.</p>';
+        }
+    }
+
+    // Call renderEmployees function when the page loads
+    window.addEventListener('load', () => {
+        renderEmployees(); // Render all employees initially
+
+        // Add event listener for search input with a delay
+        let timeoutId;
+        const searchInput = document.getElementById('search-input');
+        searchInput.addEventListener('input', () => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                renderEmployees(searchInput.value.trim()); // Filter employees based on search query
+            }, 500); // Delay of 500 milliseconds
+        });
+    });
+
+    document.getElementById('addEmp').addEventListener('click', () => {
+        window.location.href = `/addEmp.html`;
+    });
+</script>
+</body>
+</html>
+
