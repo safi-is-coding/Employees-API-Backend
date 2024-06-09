@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Employee</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 70%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .wrapper{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        img{
+            height: 300px;
+            width: 300px;
+            box-shadow: 0 0 10px gray;
+            border-radius: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+            padding: 30px 10px;
+            border-radius: 1rem;
+            background-color: rgba(233, 250, 255, 0.633);
+        }
+
+        label {
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input, textarea {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        @media screen and (max-width: 600px) {
+            .container {
+                margin: 30px;
+                padding: 10px;
+            }
+            .wrapper{
+                flex-direction: column;
+            }
+            img{
+                width: 200px;
+                height: 200px;
+                margin-bottom: 30px;
+            }
+            form{
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Update Employee</h1>
+        <div class="wrapper">
+            <img id="employee-image" src="" alt="Employee Image" >
+            
+            <form id="update-form">
+                <label for="image">Update Image</label>
+                <input type="file" id="image" name="image">
+    
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" >
+    
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" >
+    
+                <label for="dob">Date of Birth</label>
+                <input type="text" id="dob" name="dob" >
+    
+                <label for="salary">Salary</label>
+                <input type="number" id="salary" name="salary" >
+    
+                <label for="experience">Experience</label>
+                <input type="text" id="experience" name="experience" >
+    
+                <button type="submit">Update Employee</button>
+            </form>
+
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const employeeId = urlParams.get('id');
+
+            const response = await fetch(`/api/employees/${employeeId}`);
+            const employee = await response.json();
+
+            if (!response.ok) {
+                alert('Failed to fetch employee details');
+                return;
+            }
+
+            document.getElementById('employee-image').src = employee.empImage;
+            document.getElementById('name').value = employee.name;
+            document.getElementById('email').value = employee.email;
+            document.getElementById('dob').value = employee.DOB;
+            document.getElementById('salary').value = employee.salary;
+            document.getElementById('experience').value = employee.experience;
+            //document.getElementById('empImage').value = employee.empImage;
+
+            document.getElementById('update-form').addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const updatedEmployee = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    dob: document.getElementById('dob').value,
+                    salary: document.getElementById('salary').value,
+                    experience: document.getElementById('experience').value,
+                    //empImage: document.getElementById('empImage').value
+                };
+
+                const updateResponse = await fetch(`/api/employees/${employeeId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedEmployee)
+                });
+
+                if (updateResponse.ok) {
+                    alert('Employee updated successfully!');
+                    window.location.href = `/singleEmp.html?id=${employeeId}`;
+                } else {
+                    alert('Failed to update employee.');
+                }
+            });
+
+            document.getElementById('image').addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('employee-image').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
+</body>
+</html>

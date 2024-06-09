@@ -24,20 +24,20 @@ app.use(cors({
 app.use("/api/employees", employeeRoute)
 
 // main route
-app.get('/addEmployee', (req, res)=> {
-    // res.send('<h1>Welcome to the Employees API</h1>')
-    res.sendFile(path.join(__dirname, 'frontend', 'addEmp.html'));
-})
+// app.get('/addEmployee', (req, res)=> {
+//     // res.send('<h1>Welcome to the Employees API</h1>')
+//     res.sendFile(path.join(__dirname, 'frontend', 'addEmp.html'));
+// })
 
 app.get('/', (req, res)=> {
     // res.send('<h1>Welcome to the Employees API</h1>')
     res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
 })
 
-app.get('/', (req, res)=> {
-    // res.send('<h1>Welcome to the Employees API</h1>')
-    res.sendFile(path.join(__dirname, 'frontend', 'singleEmp.html'));
-})
+// app.get('/', (req, res)=> {
+//     // res.send('<h1>Welcome to the Employees API</h1>')
+//     res.sendFile(path.join(__dirname, 'frontend', 'singleEmp.html'));
+// })
 
 
 // DB Connection
