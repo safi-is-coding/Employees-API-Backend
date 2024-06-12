@@ -15,7 +15,7 @@ router.post('/', upload.single("empImage") ,createEmployee)
 router.delete('/:id', deleteEmployee)
 
 // updating the employee by id
-router.put('/:id', updateEmployee)
+router.put('/:id', upload.single("empImage"), updateEmployee)
 
 // finding single employee by id
 router.get('/:id', findSingleEmployee)

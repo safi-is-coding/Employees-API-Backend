@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,13 +7,13 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
+            margin: 0 ;
             padding: 0;
             background-color: #f4f4f4;
         }
 
         .container {
-            max-width: 70%;
+            max-width: 90%;
             margin: 20px auto;
             padding: 20px;
             background-color: #ffffff;
@@ -27,10 +27,10 @@
         }
 
         img{
-            height: 300px;
-            width: 300px;
+            height: 400px;
+            width: 400px;
             box-shadow: 0 0 10px gray;
-            border-radius: 2rem;
+            border-radius: 50%;
         }
 
         h1 {
@@ -43,9 +43,10 @@
             display: flex;
             flex-direction: column;
             width: 50%;
-            padding: 30px 10px;
+            padding: 30px 30px;
             border-radius: 1rem;
-            background-color: rgba(233, 250, 255, 0.633);
+            background-color: rgba(218, 218, 218, 0.785);
+
         }
 
         label {
@@ -76,21 +77,21 @@
             background-color: #0056b3;
         }
 
-        @media screen and (max-width: 600px) {
+        @media screen and (max-width: 800px) {
             .container {
-                margin: 30px;
                 padding: 10px;
+                width: 80%;
             }
             .wrapper{
                 flex-direction: column;
             }
             img{
-                width: 200px;
-                height: 200px;
+                height: 80%;
+                width: 80%;
                 margin-bottom: 30px;
             }
             form{
-                width: 90%;
+                width: 80%;
             }
         }
     </style>
@@ -105,20 +106,24 @@
                 <label for="image">Update Image</label>
                 <input type="file" id="image" name="image">
     
-                <label for="name">Name</label>
-                <input type="text" id="name" name="name" >
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" >
     
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" >
+                
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" >
     
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" >
+                
                 <label for="dob">Date of Birth</label>
                 <input type="text" id="dob" name="dob" >
     
-                <label for="salary">Salary</label>
-                <input type="number" id="salary" name="salary" >
+                <label for="address">Address</label>
+                <textarea name="address" id="address" ></textarea>
     
-                <label for="experience">Experience</label>
-                <input type="text" id="experience" name="experience" >
     
                 <button type="submit">Update Employee</button>
             </form>
@@ -141,7 +146,7 @@
             }
 
             document.getElementById('employee-image').src = employee.empImage;
-            document.getElementById('name').value = employee.name;
+            document.getElementById('name').value = employee.firstName;
             document.getElementById('email').value = employee.email;
             document.getElementById('dob').value = employee.DOB;
             document.getElementById('salary').value = employee.salary;
@@ -183,6 +188,190 @@
                     document.getElementById('employee-image').src = e.target.result;
                 }
                 reader.readAsDataURL(file);
+            });
+        });
+    </script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Employee</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0 ;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 90%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .wrapper{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        img{
+            height: 400px;
+            width: 400px;
+            box-shadow: 0 0 10px gray;
+            border-radius: 50%;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+            padding: 30px 30px;
+            border-radius: 1rem;
+            background-color: rgba(218, 218, 218, 0.785);
+
+        }
+
+        label {
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input, textarea {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        @media screen and (max-width: 800px) {
+            .container {
+                padding: 10px;
+                width: 80%;
+            }
+            .wrapper{
+                flex-direction: column;
+            }
+            img{
+                height: 80%;
+                width: 80%;
+                margin-bottom: 30px;
+            }
+            form{
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Update Employee</h1>
+        <div class="wrapper">
+            <img id="employee-image" src="" alt="Employee Image" >
+            
+            <form id="update-form">
+                <!-- Removed update image section since it's not necessary for updating other employee data -->
+
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" >
+
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" >
+                
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" >
+
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" >
+                
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" name="dob" >
+
+                <label for="address">Address</label>
+                <textarea name="address" id="address"></textarea>
+                
+                <button type="submit">Update Employee</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const employeeId = urlParams.get('id');
+
+            const response = await fetch(`/api/employees/${employeeId}`);
+            const employee = await response.json();
+
+            if (!response.ok) {
+                alert('Failed to fetch employee details');
+                return;
+            }
+
+            document.getElementById('employee-image').src = employee.empImage;
+            document.getElementById('firstName').value = employee.firstName;
+            document.getElementById('lastName').value = employee.lastName;
+            document.getElementById('email').value = employee.email;
+            document.getElementById('phone').value = employee.phone;
+            document.getElementById('dob').value = employee.dateOfBirth.substr(0, 10); // Get the date part only
+            document.getElementById('address').value = employee.address;
+
+            document.getElementById('update-form').addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const updatedEmployee = {
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    dob: document.getElementById('dob').value,
+                    address: document.getElementById('address').value
+                };
+
+                const updateResponse = await fetch(`/api/employees/${employeeId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedEmployee)
+                });
+
+                if (updateResponse.ok) {
+                    alert('Employee updated successfully!');
+                    window.location.href = `/singleEmp.html?id=${employeeId}`;
+                } else {
+                    alert('Failed to update employee.');
+                }
             });
         });
     </script>

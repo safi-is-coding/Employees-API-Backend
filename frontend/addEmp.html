@@ -39,8 +39,8 @@
         input[type="text"],
         input[type="email"],
         input[type="date"],
-        input[type="number"],
-        input[type="file"] {
+        input[type="file"],
+        input[type="tel"] {
             padding: 12px;
             margin-bottom: 20px;
             border-radius: 5px;
@@ -53,8 +53,8 @@
         input[type="text"]:focus,
         input[type="email"]:focus,
         input[type="date"]:focus,
-        input[type="number"]:focus,
-        input[type="file"]:focus {
+        input[type="file"]:focus,
+        input[type="tel"]:focus {
             outline: none;
             border-color: #007bff;
         }
@@ -75,39 +75,73 @@
             color: red;
             margin-top: 5px;
         }
+        .loading {
+            display: none;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #007bff;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Add New Employee</h1>
         <form id="employeeForm" enctype="multipart/form-data">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" placeholder="Enter name" required>
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" placeholder="Enter first name" required>
+            
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" placeholder="Enter last name" required>
             
             <label for="email">Email</label>
             <input type="email" id="email" name="email" placeholder="Enter email" required>
             
-            <label for="DOB">Date of Birth</label>
-            <input type="date" id="DOB" name="DOB" required>
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" placeholder="Enter phone number" required>
             
-            <label for="salary">Salary</label>
-            <input type="number" id="salary" name="salary" placeholder="Enter salary" required>
+            <label for="address">Address</label>
+            <input type="text" id="address" name="address" placeholder="Enter address" required>
             
-            <label for="experience">Experience (in years)</label>
-            <input type="number" id="experience" name="experience" placeholder="Enter experience" required>
+            <label for="dateOfBirth">Date of Birth</label>
+            <input type="date" id="dateOfBirth" name="dateOfBirth" required>
             
             <label for="empImage">Employee Image</label>
             <input type="file" id="empImage" name="empImage" accept="image/*" required>
+            
+            <label for="departmentId">Department ID</label>
+            <input type="text" id="departmentId" name="departmentId" placeholder="Enter department ID">
+            
+            <label for="roleId">Role ID</label>
+            <input type="text" id="roleId" name="roleId" placeholder="Enter role ID">
+            
+            <!-- <label for="managerId">Manager ID</label>
+            <input type="text" id="managerId" name="managerId" placeholder="Enter manager ID"> -->
             
             <button type="submit">Submit</button>
         </form>
     </div>
 
+    <div class="loading" id="loading"></div>
+
     <script>
         const form = document.getElementById('employeeForm');
+        const loading = document.getElementById('loading');
 
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
+
+            loading.style.display = 'block'; // Show loading animation
 
             const formData = new FormData(form);
 
@@ -118,15 +152,18 @@
                 });
 
                 if (response.ok) {
+                    loading.style.display = 'none'; // Hide loading animation
                     alert('Employee added successfully');
+                    window.location.href = `/index.html`;
                     form.reset();
                 } else {
+                    loading.style.display = 'none'; // Hide loading animation
                     alert('Failed to add employee');
                 }
             } catch (error) {
                 console.error('Error:', error);
                 alert('An error occurred. Please try again.');
-            }
+            } 
         });
     </script>
 </body>

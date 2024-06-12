@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Records</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 90%;
+            margin: 0 auto;
+            margin-bottom: 5%;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 10px;
+        }
+        .header h1 {
+            text-align: center;
+            color: white;
+            margin: 0;
+        }
+        .back-button {
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+
+        .container{
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .attendance-record {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .attendance-record h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .attendance-record p {
+            color: #666;
+        }
+        .attendance-status {
+            font-weight: bold;
+        }
+        .attendance-status.present {
+            color: green;
+        }
+        .attendance-status.absent {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Attendance Records</h1>
+        <a href="index.html" class="back-button">Back</a>
+    </div>
+    <div class="container" id="attendance-container"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/api/attendance') // Update this URL with the actual endpoint
+                .then(response => response.json())
+                .then(data => {
+                    const attendanceContainer = document.getElementById('attendance-container');
+                    
+                    data.forEach(record => {
+                        const attendanceDiv = document.createElement('div');
+                        attendanceDiv.className = 'attendance-record';
+                        
+                        const empName = document.createElement('h2');
+                        empName.textContent = record.employeeId.name;
+
+                        const empImage = document.createElement('img');
+                        empImage.src = record.employeeId.empImage;
+                        empImage.alt = record.employeeId.name;
+                        empImage.style.width = '100px';
+                        empImage.style.height = '100px';
+                        empImage.style.borderRadius = '50%';
+
+                        const attendanceDetails = document.createElement('p');
+                        attendanceDetails.innerHTML = `
+                            <strong>Email:</strong> ${record.employeeId.email}<br>
+                            <strong>Date:</strong> ${new Date(record.date).toDateString()}<br>
+                            <strong>Status:</strong> <span class="attendance-status ${record.status.toLowerCase()}">${record.status}</span><br>
+                            <strong>Check-In Time:</strong> ${record.checkInTime ? record.checkInTime : 'N/A'}<br>
+                            <strong>Check-Out Time:</strong> ${record.checkOutTime ? record.checkOutTime : 'N/A'}
+                        `;
+
+                        attendanceDiv.appendChild(empImage);
+                        attendanceDiv.appendChild(empName);
+                        attendanceDiv.appendChild(attendanceDetails);
+                        
+                        attendanceContainer.appendChild(attendanceDiv);
+                    });
+                })
+                .catch(error => console.error('Error fetching attendance:', error));
+        });
+    </script>
+</body>
+</html>

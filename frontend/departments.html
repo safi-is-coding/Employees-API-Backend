@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Departments</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 90%;
+            margin: 0 auto;
+            margin-bottom: 5%;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #6e6e6e;
+            padding: 10px 30px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            text-align: center;
+            color: white;
+            margin: 0;
+        }
+        .back-button {
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+        #departments {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .department {
+            background-color: #e9ecef;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            width: 250px;
+            height: 100px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(2, 2, 2, 0.1);
+            transition: all 0.5s ease;
+        }
+        .department:hover {
+            background-color: #d6ebe1d2;
+            box-shadow: 0px 2px 5px rgba(2, 2, 2, 0.522);
+        }
+        .department h2 {
+            margin: 0;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            color: #b00055;
+        }
+        .department p {
+            margin: 5px 0;
+            color: #0051ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Departments</h1>
+        <a href="index.html" class="back-button">Back</a>
+    </div>
+    <div class="container">
+        <div id="departments"></div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/api/departments')
+                .then(response => response.json())
+                .then(data => {
+                    const departmentsContainer = document.getElementById('departments');
+                    data.forEach(department => {
+                        const departmentDiv = document.createElement('div');
+                        departmentDiv.className = 'department';
+                        
+                        const departmentName = document.createElement('h2');
+                        departmentName.textContent = department.departmentName;
+                        
+                        const departmentLocation = document.createElement('p');
+                        departmentLocation.textContent = `Location: ${department.location}`;
+                        
+                        departmentDiv.appendChild(departmentName);
+                        departmentDiv.appendChild(departmentLocation);
+                        
+                        departmentsContainer.appendChild(departmentDiv);
+                    });
+                })
+                .catch(error => console.error('Error fetching departments:', error));
+        });
+    </script>
+</body>
+</html>

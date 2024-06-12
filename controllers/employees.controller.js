@@ -5,7 +5,7 @@ const uploadOnCloudinary = require('../utils/cloudinary.js')
 const getEmployees = async (req, res) => {
     try {
 
-        const employees = await Employees.find({})
+        const employees = await Employees.find({}).populate('departmentId').populate('roleId').exec()
         res.status(200).json(employees)
 
     } catch (error) {
@@ -18,7 +18,6 @@ const createEmployee = async (req, res) => {
         
     //     const employee = await Employees.create(req.body)
 
-    //     const image = 
 
     //     res.status(200).json(employee)
 
@@ -27,20 +26,24 @@ const createEmployee = async (req, res) => {
     // }
 
     try {
-        const { name, email, DOB, salary, experience } = req.body;
+        const { firstName, lastName, email, phone, address, dateOfBirth, departmentId, roleId } = req.body;
         let empImage = req.file.filename;
-        
+        const managerId = req.body._id
         empImage = await uploadOnCloudinary(empImage)
-        console.log(empImage, "hi");
+        // console.log(empImage, "hi");
 
 
         const employee = await Employees.create({
-            name,
+            firstName,
+            lastName,
             email,
-            DOB,
-            salary,
-            experience,
-            empImage
+            phone,
+            address,
+            dateOfBirth,
+            empImage,
+            departmentId,
+            roleId,
+            managerId
         });
 
         res.status(200).json(employee);
@@ -108,12 +111,12 @@ const deleteEmployee = async(req, res) => {
 const updateEmployee = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, email, DOB, salary, experience } = req.body;
+        const { firstName, lastName, email, phone, address, dateOfBirth, departmentId, roleId, managerId } = req.body;
 
         // Check if all required fields are provided
-        if (name=='' || email=='' || DOB=='' || salary=='' || experience=='') {
-            return res.status(400).json({ message: 'Please provide all required fields.' });
-        }
+        // if (name=='' || email=='' || DOB=='' || salary=='' || experience=='') {
+        //     return res.status(400).json({ message: 'Please provide all required fields.' });
+        // }
 
         // Check if the employee exists
         const employee = await Employees.findById(id);
@@ -131,12 +134,16 @@ const updateEmployee = async (req, res) => {
         }
         // Update employee details
         const updatedEmployee = await Employees.findByIdAndUpdate(id, {
-            name,
+            firstName,
+            lastName,
             email,
-            DOB,
-            salary,
-            experience,
-            empImage
+            phone,
+            address,
+            dateOfBirth,
+            empImage,
+            departmentId,
+            roleId,
+            managerId
         }, { new: true });
 
         res.status(200).json({ message: 'Employee updated successfully', employee: updatedEmployee });
@@ -150,7 +157,7 @@ const findSingleEmployee = async(req, res) => {
     try {
 
         const { id } = req.params
-        const employee = await Employees.findById(id)
+        const employee = await Employees.findById(id).populate('departmentId').populate('roleId').exec()
 
         if(!employee){
             res.status(400).json({message: 'Employee not found'})

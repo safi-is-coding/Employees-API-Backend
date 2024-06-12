@@ -1,268 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Management System</title>
-    <style>
-        /* CSS styles for employee cards */
-        * {
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        nav {
-            background-color: #ffc400;
-            color: black;
-            padding: 20px;
-            text-align: center;
-        }
-
-        nav h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
-
-        .search-bar {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        #search-input {
-            flex-grow: .4;
-            padding: 15px;
-            width: 50%;
-            height: 100%;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1rem;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            outline: none;
-        }
-
-        #addEmp {
-            flex-grow: .3;
-            background-color: #007bff;
-            color: #fff;
-            padding: 15px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: background-color 0.3s ease;
-        }
-
-        #addEmp:hover {
-            background-color: #0056b3;
-        }
-
-        #employees-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-        }
-
-        .employee-card {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            overflow: hidden;
-            margin: 10px;
-            width: calc(20% - 20px);
-            background-color: #fff;
-            transition: transform 0.3s ease;
-        }
-
-        .employee-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .employee-card img {
-            width: 100%;
-            border-radius: 5px 5px 0 0;
-        }
-
-        .employee-card-info {
-            padding: 20px;
-        }
-
-        .employee-card h2 {
-            margin-top: 0;
-            font-size: 20px;
-            color: darkgreen;
-        }
-
-        .employee-card button {
-            padding: 10px;
-            margin-top: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .employee-card .update-btn {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .employee-card .delete-btn {
-            background-color: #dc3545;
-            color: white;
-        }
-
-        @media (max-width: 768px) {
-            .search-bar {
-                flex-direction: column-reverse;
-            }
-            #search-input{
-                width: 100%;
-            }
-            #addEmp {
-                width: 50%;
-                font-size: 1rem;
-                margin-bottom: 10px;
-            }
-
-            #employees-container {
-                justify-content: flex-start;
-            }
-
-            .employee-card {
-                width: calc(50% - 20px);
-            }
-        }
-    </style>
-</head>
-<body>
-<nav>
-    <h1>All Employees Details</h1>
-</nav>
-<div class="container">
-    <div class="search-bar">
-        <input type="text" id="search-input" placeholder="Search by name...">
-        <button id="addEmp">Add Employee</button>
-    </div>
-    <div id="employees-container"></div>
-</div>
-
-<script>
-    // Fetch employees data from backend API
-    async function fetchEmployees() {
-        try {
-            const response = await fetch('/api/employees');
-            const employees = await response.json();
-            return employees;
-        } catch (error) {
-            console.error('Error:', error);
-            return [];
-        }
-    }
-
-    // Delete employee by ID
-    async function deleteEmployee(employeeId) {
-        try {
-            const response = await fetch(`/api/employees/${employeeId}`, {
-                method: 'DELETE'
-            });
-
-            if (response.ok) {
-                alert('Employee deleted successfully!');
-                renderEmployees();
-            } else {
-                alert('Failed to delete employee.');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Failed to delete employee.');
-        }
-    }
-
-    // Render employee cards based on search query
-    async function renderEmployees(searchQuery = '') {
-        const employeesContainer = document.getElementById('employees-container');
-        employeesContainer.innerHTML = ''; // Clear previous content
-
-        const employees = await fetchEmployees();
-        if (employees.length === 0) {
-            employeesContainer.innerHTML = '<p>No employees found.</p>';
-            return;
-        }
-
-        employees.forEach(employee => {
-            // Filter employees based on search query
-            const employeeName = employee.name.toLowerCase();
-            if (employeeName.includes(searchQuery.toLowerCase())) {
-                const card = document.createElement('div');
-                card.classList.add('employee-card');
-
-                // Add employee details to card
-                card.innerHTML = `
-                    <img src="${employee.empImage}" alt="${employee.name}">
-                    <div class="employee-card-info">
-                        <h2>${employee.name}</h2>
-                        <button class="update-btn">Update</button>
-                        <button class="delete-btn">Delete</button>
-                    </div>
-                `;
-
-                // Add click event listener to navigate to employee details page
-                card.querySelector('.update-btn').addEventListener('click', () => {
-                    window.location.href = `/updateEmp.html?id=${employee._id}`;
-                });
-
-                card.querySelector('.delete-btn').addEventListener('click', () => {
-                    if (confirm(`Are you sure you want to delete ${employee.name}?`)) {
-                        deleteEmployee(employee._id);
-                    }
-                });
-
-                employeesContainer.appendChild(card);
-            }
-        });
-
-        if (employeesContainer.children.length === 0) {
-            employeesContainer.innerHTML = '<p>No matching employees found.</p>';
-        }
-    }
-
-    // Call renderEmployees function when the page loads
-    window.addEventListener('load', () => {
-        renderEmployees(); // Render all employees initially
-
-        // Add event listener for search input with a delay
-        let timeoutId;
-        const searchInput = document.getElementById('search-input');
-        searchInput.addEventListener('input', () => {
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => {
-                renderEmployees(searchInput.value.trim()); // Filter employees based on search query
-            }, 500); // Delay of 500 milliseconds
-        });
-    });
-
-    document.getElementById('addEmp').addEventListener('click', () => {
-        window.location.href = `/addEmp.html`;
-    });
-</script>
-</body>
-</html> -->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -276,6 +11,48 @@
             margin: 0;
             padding: 0;
         }
+
+        nav {
+            width: 100%;
+            background-color: #3094ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        nav h1 {
+            font-size: 2rem;
+            color: white;
+        }
+
+        nav .heading {
+            display: flex;
+            align-items: center;
+            padding-left: 30px;
+            width: 40%;
+        }
+
+        nav .links {
+            display: flex;
+            justify-content: right;
+            padding-right: 30px;
+            gap: 20px;
+            width: 60%;
+        }
+
+        .links a {
+            background-color: rgba(0, 78, 114, 0.36);
+            padding: 7px 20px;
+            border-radius: 1rem;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .links a:hover {
+            background-color: #0056b3;
+        }
+
         .container {
             max-width: 90%;
             margin: 20px auto;
@@ -289,7 +66,7 @@
             color: #333;
             margin-bottom: 20px;
         }
-        #employee-list{
+        #employee-list {
             display: flex;
             gap: 5%;
             flex-wrap: wrap;
@@ -297,27 +74,29 @@
         }
         .employee-card {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between; /* Align buttons to the right */
             padding: 15px;
-            margin-bottom: 15px;
+            margin-bottom: 5%;
             background-color: #e9ecef;
             border-radius: 8px;
             cursor: pointer;
-            width: 500px;
+            width: 100%;
+            max-width: 300px;
             transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .employee-card:hover {
             background-color: #d1e7dd;
         }
         .employee-card img {
-            width: 50px;
-            height: 50px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            margin-right: 15px;
+            margin-bottom: 15px;
         }
         .employee-details {
-            flex-grow: 1;
+            text-align: left;
         }
         .employee-details h2 {
             margin: 0;
@@ -330,10 +109,11 @@
         }
         .buttons-container {
             display: flex;
-            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
         }
         .button {
-            margin-left: 10px;
+            margin: 0 5px;
             padding: 8px 16px;
             background-color: #007bff;
             color: #fff;
@@ -347,13 +127,15 @@
         }
         .search-container {
             margin-bottom: 20px;
-            padding: 0 6%;
+            padding: 0 7%;
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
         }
         .search-container input[type="text"] {
             padding: 8px;
-            width: 40%;
+            width: 100%;
+            max-width: 40%;
             border-radius: 5px;
             border: 1px solid #ccc;
             transition: border-color 0.3s ease;
@@ -362,14 +144,79 @@
             outline: none;
             border-color: #007bff;
         }
+        .search-container .button {
+            width: 100%;
+            max-width: 200px;
+            margin: 0;
+        }
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px;
+            }
+            nav h1 {
+                font-size: 1.7rem;
+                margin-bottom: 10px;
+            }
+            nav .heading {
+                margin: 0;
+                width: 100%;
+            }
+            nav .links {
+                width: 100%;
+                justify-content: center;
+                gap: 10px;
+            }
+            nav .links a {
+                margin-bottom: 10px;
+                font-size: 0.8rem;
+            }
+            .employee-card {
+                align-items: flex-start;
+                text-align: left;
+            }
+            .employee-card img {
+                margin-bottom: 10px;
+            }
+            .buttons-container {
+                justify-content: flex-start;
+                width: 100%;
+            }
+            .button {
+                margin-left: 0;
+                margin-right: 10px;
+            }
+            .search-container {
+                padding: 0 1%;
+            }
+            .search-container .button {
+                width: 30%;
+                font-size: 0.8rem;
+            }
+            .search-container input[type="text"] {
+                max-width: 60%;
+            }
+        }
     </style>
 </head>
 <body>
+    <nav>
+        <div class="heading">
+            <h1>Employee Management</h1>
+        </div>
+        <div class="links">
+            <a href="departments.html">Departments</a>
+            <a href="projects.html">Projects</a>
+            <a href="roles.html">Roles</a>
+            <a href="attendance.html">Attendance</a>
+        </div>
+    </nav>
     <div class="container">
         <h1>Employee List</h1>
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Search by name...">
-            <button type="button" class="button" onclick="window.location.href = 'addEmp.html'"">Add Employee</button>
+            <button type="button" class="button" onclick="window.location.href = 'addEmp.html'">Add Employee</button>
         </div>
         <div id="employee-list"></div>
     </div>
@@ -390,10 +237,13 @@
             const card = document.createElement('div');
             card.className = 'employee-card';
             card.innerHTML = `
+                <img src="${employee.empImage}" alt="${employee.firstName} ${employee.lastName}">
                 <div class="employee-details">
-                    <img src="${employee.empImage}" alt="${employee.name}">
-                    <h2>${employee.name}</h2>
-                    <p>${employee.email}</p>
+                    <h2>${employee.firstName} ${employee.lastName}</h2>
+                    <p>Email: ${employee.email}</p>
+                    <!-- <p>Phone: ${employee.phone}</p> -->
+                    <p>Department: ${employee.departmentId?.departmentName ?? 'N/A'}</p>
+                    <!-- <p>Role: ${employee.roleId.roleName}</p> -->
                 </div>
                 <div class="buttons-container">
                     <button class="button" onclick="viewEmployee('${employee._id}')">View</button>
@@ -407,7 +257,8 @@
         async function renderEmployeeList() {
             const employeeList = document.getElementById('employee-list');
             const employees = await fetchEmployees();
-            employees.forEach(employee => {
+            employeeList.innerHTML = ''; // Clear existing list
+            employees.reverse().forEach(employee => { // Reverse the array before rendering
                 const card = renderEmployeeCard(employee);
                 employeeList.appendChild(card);
             });
@@ -421,8 +272,9 @@
             const employeeList = document.getElementById('employee-list');
             employeeList.innerHTML = ''; // Clear existing list
             const employees = await fetchEmployees();
-            employees.forEach(employee => {
-                if (employee.name.toLowerCase().includes(searchTerm)) {
+            employees.reverse().forEach(employee => { // Reverse the array before filtering and rendering
+                const fullName = `${employee.firstName} ${employee.lastName}`.toLowerCase();
+                if (fullName.includes(searchTerm)) {
                     const card = renderEmployeeCard(employee);
                     employeeList.appendChild(card);
                 }
@@ -433,6 +285,7 @@
         function updateEmployee(employeeId) {
             window.location.href = `updateEmp.html?id=${employeeId}`;
         }
+
         // View employee function
         function viewEmployee(employeeId) {
             window.location.href = `singleEmp.html?id=${employeeId}`;
@@ -443,24 +296,15 @@
             const confirmation = confirm('Are you sure you want to delete this employee?');
             if (confirmation) {
                 try {
-                    const response = await fetch(`/api/employees/${employeeId}`, {
-                        method: 'DELETE'
+                    await fetch(`/api/employees/${employeeId}`, {
+                        method: 'DELETE',
                     });
-
-                    if (response.ok) {
-                        alert('Employee deleted successfully');
-                        // Refresh the page to reflect the changes
-                        location.reload();
-                    } else {
-                        alert('Failed to delete employee');
-                    }
+                    renderEmployeeList();
                 } catch (error) {
                     console.error('Error:', error);
-                    alert('An error occurred. Please try again.');
                 }
             }
         }
     </script>
 </body>
 </html>
-
