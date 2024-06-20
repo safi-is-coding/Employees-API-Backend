@@ -47,6 +47,9 @@
             width: 100%;
         }
         .role {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
             background-color: #fff;
             border: 1px solid #ddd;
             padding: 20px;
@@ -58,17 +61,19 @@
         }
         .role h2 {
             margin-top: 0;
+            font-size: 2rem;
             color: #333;
         }
         .role p {
-            color: #666;
+            font-weight: bold;
+            color: #007bff;
         }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>Roles</h1>
-        <a href="index.html" class="back-button">Back</a>
+        <a href="/dashboard" class="back-button">Back</a>
     </div>
     <div class="container" id="roles-container"></div>
     <script>

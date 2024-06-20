@@ -39,21 +39,20 @@
         .back-button:hover {
             background-color: #0056b3;
         }
-
-        .container{
+        .container {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
             gap: 20px;
         }
-
         .leave-record {
             background-color: #fff;
             border: 1px solid #ddd;
             padding: 20px;
             margin-top: 20px;
             border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(2, 2, 2, 0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 300px;
         }
         .leave-record h2 {
             margin-top: 0;
@@ -65,21 +64,28 @@
         .leave-status {
             font-weight: bold;
         }
-        .leave-status.approved {
-            color: green;
-        }
         .leave-status.pending {
             color: orange;
         }
+        .leave-status.approved {
+            color: green;
+        }
         .leave-status.rejected {
             color: red;
+        }
+        .employee-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: block;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>Leave Records</h1>
-        <a href="index.html" class="back-button">Back</a>
+        <a href="/dashboard" class="back-button">Back</a>
     </div>
     <div class="container" id="leave-container"></div>
     <script>
@@ -89,28 +95,33 @@
                 .then(data => {
                     const leaveContainer = document.getElementById('leave-container');
                     
-                    data.forEach(leave => {
+                    data.forEach(record => {
                         const leaveDiv = document.createElement('div');
                         leaveDiv.className = 'leave-record';
                         
                         const empName = document.createElement('h2');
-                        empName.textContent = leave.employeeId.name;
-                        
                         const empImage = document.createElement('img');
-                        empImage.src = leave.employeeId.empImage;
-                        empImage.alt = leave.employeeId.name;
-                        empImage.style.width = '100px';
-                        empImage.style.height = '100px';
-                        empImage.style.borderRadius = '50%';
+                        
+                        if (record.employeeId) {
+                            empName.textContent = `${record.employeeId.firstName} ${record.employeeId.lastName}`;
+                            empImage.src = record.employeeId.empImage;
+                            empImage.alt = `${record.employeeId.firstName} ${record.employeeId.lastName}`;
+                        } else {
+                            empName.textContent = 'Unknown Employee';
+                            empImage.src = 'placeholder_image_url'; // Set a placeholder image URL if necessary
+                            empImage.alt = 'Unknown Employee';
+                        }
+
+                        empImage.className = 'employee-image';
 
                         const leaveDetails = document.createElement('p');
                         leaveDetails.innerHTML = `
-                            <strong>Email:</strong> ${leave.employeeId.email}<br>
-                            <strong>Leave Type:</strong> ${leave.leaveType}<br>
-                            <strong>Reason:</strong> ${leave.reason}<br>
-                            <strong>Start Date:</strong> ${new Date(leave.startDate).toDateString()}<br>
-                            <strong>End Date:</strong> ${new Date(leave.endDate).toDateString()}<br>
-                            <strong>Status:</strong> <span class="leave-status ${leave.status.toLowerCase()}">${leave.status}</span>
+                            <strong>Email:</strong> ${record.employeeId ? record.employeeId.email : 'N/A'}<br>
+                            <strong>Start Date:</strong> ${new Date(record.startDate).toDateString()}<br>
+                            <strong>End Date:</strong> ${new Date(record.endDate).toDateString()}<br>
+                            <strong>Leave Type:</strong> ${record.leaveType}<br>
+                            <strong>Reason:</strong> ${record.reason}<br>
+                            <strong>Status:</strong> <span class="leave-status ${record.status.toLowerCase()}">${record.status}</span>
                         `;
 
                         leaveDiv.appendChild(empImage);

@@ -33,12 +33,7 @@ const updateAttendance = async (req, res) => {
 
         // const updateAttendance = await Attendance.findByIdAndUpdate(id, req.body)
 
-        const updateAttendance = await Attendance.findByIdAndUpdate(id, {
-            date,
-            status,
-            checkInTime,
-            checkOutTime
-        }, { new: true });
+        const updateAttendance = await Attendance.findByIdAndUpdate(id, req.body, { new: true });
 
         res.status(200).json({message: "Attendance updated successfully", updateAttendance})
 
@@ -68,9 +63,9 @@ const deleteAttendance = async (req, res) => {
 const findSingleAttendance = async (req, res) => {
     try {
         const { id } = req.params
-        const attendance = await Attendance.findById(id)
+        const attendance = await Attendance.findById(id).populate('employeeId').exec()
 
-        if(!leaattendanceve){
+        if(!attendance){
             res.status(400).json({message: "Attendance not found"})
         }
 

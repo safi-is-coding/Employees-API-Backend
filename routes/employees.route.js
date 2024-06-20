@@ -1,7 +1,8 @@
 const express = require('express')
-const Employees = require('../models/employee.model.js')
+// const Employees = require('../models/employee.model.js')
 const { getEmployees, createEmployee, deleteEmployee, updateEmployee, findSingleEmployee } = require('../controllers/employees.controller.js')
 const upload = require("../middlewares/multer.js")
+const auth = require('../middlewares/auth.js')
 
 const router = express.Router()
 

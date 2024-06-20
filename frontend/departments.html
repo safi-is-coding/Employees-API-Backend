@@ -20,7 +20,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #6e6e6e;
+            background-color: #292929;
             padding: 10px 30px;
             margin-bottom: 20px;
         }
@@ -48,26 +48,27 @@
             flex-wrap: wrap;
         }
         .department {
-            background-color: #e9ecef;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: rgb(255, 255, 255);
             border: 1px solid #ddd;
             padding: 15px;
             margin: 10px 0;
             width: 250px;
-            height: 100px;
+            height: 150px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(2, 2, 2, 0.1);
             transition: all 0.5s ease;
         }
-        .department:hover {
-            background-color: #d6ebe1d2;
-            box-shadow: 0px 2px 5px rgba(2, 2, 2, 0.522);
-        }
+
         .department h2 {
             margin: 0;
             font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-            color: #b00055;
+            font-size: 2rem;
         }
         .department p {
+            font-weight: bold;
             margin: 5px 0;
             color: #0051ff;
         }
@@ -76,7 +77,7 @@
 <body>
     <div class="header">
         <h1>Departments</h1>
-        <a href="index.html" class="back-button">Back</a>
+        <a href="/dashboard" class="back-button">Back</a>
     </div>
     <div class="container">
         <div id="departments"></div>

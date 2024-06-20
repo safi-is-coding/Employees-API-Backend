@@ -123,14 +123,18 @@ const updateEmployee = async (req, res) => {
         if (!employee) {
             return res.status(404).json({ message: 'Employee not found.' });
         }
+        console.log(employee);
 
         // Check if an image file is provided
-        let empImage = 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?t=st=1717930916~exp=1717934516~hmac=59bef242306aaa2cc875ac60c987c98a6c13ea40a239b4d2b0427f72e2e1a651&w=740';
+        let empImage;
         console.log(req.file);
         if (req.file) {
             empImage = req.file.filename;
+            console.log(empImage);
             // Upload the image to Cloudinary or any other cloud storage service
             empImage = await uploadOnCloudinary(empImage);
+            console.log(empImage);
+
         }
         // Update employee details
         const updatedEmployee = await Employees.findByIdAndUpdate(id, {

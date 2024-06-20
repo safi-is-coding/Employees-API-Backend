@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .navbar {
+            width: 100%;
+            background-color: #333;
+            padding: 10px 20px;
+            color: white;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        .navbar .title {
+            text-align: left;
+            padding-left: 20px;
+            margin: 0;
+            width: 60%;
+        }
+        .navbar .auth-buttons {
+            width: 40%;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 15px;
+            gap: 10px;
+        }
+        .navbar .auth-buttons a {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .navbar .auth-buttons a:hover {
+            background-color: #0056b3;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 1200px;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            margin-top: 20px;
+        }
+        .dashboard-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 150px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .dashboard-item:hover {
+            background-color: #007bff;
+            color: white;
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="title">Employee Management System</div>
+        <div class="auth-buttons">
+            <a href="/user/login">Login</a>
+            <a href="/user/register">Register</a>
+        </div>
+    </div>
+    <div class="dashboard">
+        <a href="/emp" class="dashboard-item">Employee List</a>
+        <a href="/departments" class="dashboard-item">Departments</a>
+        <a href="/projects" class="dashboard-item">Projects</a>
+        <a href="/attendance" class="dashboard-item">Attendance</a>
+        <a href="/leaves" class="dashboard-item">Leaves</a>
+        <a href="/roles" class="dashboard-item">Roles</a>
+    </div>
+</body>
+</html>

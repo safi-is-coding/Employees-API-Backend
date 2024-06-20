@@ -59,7 +59,7 @@ const deleteLeave = async (req, res) => {
 const findSingleLeave = async (req, res) => {
     try {
         const { id } = req.params
-        const leave = await Leaves.findById(id)
+        const leave = await Leaves.findById(id).populate('employeeId').exec()
 
         if(!leave){
             res.status(400).json({message: "Leave not found"})

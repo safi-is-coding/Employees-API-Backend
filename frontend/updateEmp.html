@@ -105,31 +105,28 @@
             <form id="update-form">
                 <label for="image">Update Image</label>
                 <input type="file" id="image" name="image">
-    
+
                 <label for="firstName">First Name</label>
                 <input type="text" id="firstName" name="firstName" >
-    
+
                 <label for="lastName">Last Name</label>
                 <input type="text" id="lastName" name="lastName" >
                 
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" >
-    
+
                 <label for="phone">Phone Number</label>
                 <input type="tel" id="phone" name="phone" >
                 
                 <label for="dob">Date of Birth</label>
-                <input type="text" id="dob" name="dob" >
-    
+                <input type="date" id="dob" name="dob" >
+
                 <label for="address">Address</label>
-                <textarea name="address" id="address" ></textarea>
-    
-    
+                <textarea name="address" id="address"></textarea>
+                
                 <button type="submit">Update Employee</button>
             </form>
-
         </div>
-
     </div>
 
     <script>
@@ -146,31 +143,32 @@
             }
 
             document.getElementById('employee-image').src = employee.empImage;
-            document.getElementById('name').value = employee.firstName;
+            document.getElementById('firstName').value = employee.firstName;
+            document.getElementById('lastName').value = employee.lastName;
             document.getElementById('email').value = employee.email;
-            document.getElementById('dob').value = employee.DOB;
-            document.getElementById('salary').value = employee.salary;
-            document.getElementById('experience').value = employee.experience;
-            //document.getElementById('empImage').value = employee.empImage;
+            document.getElementById('phone').value = employee.phone;
+            document.getElementById('dob').value = employee.dateOfBirth.substr(0, 10); // Get the date part only
+            document.getElementById('address').value = employee.address;
 
             document.getElementById('update-form').addEventListener('submit', async (event) => {
                 event.preventDefault();
 
-                const updatedEmployee = {
-                    name: document.getElementById('name').value,
-                    email: document.getElementById('email').value,
-                    dob: document.getElementById('dob').value,
-                    salary: document.getElementById('salary').value,
-                    experience: document.getElementById('experience').value,
-                    //empImage: document.getElementById('empImage').value
-                };
+                const formData = new FormData();
+                formData.append('firstName', document.getElementById('firstName').value);
+                formData.append('lastName', document.getElementById('lastName').value);
+                formData.append('email', document.getElementById('email').value);
+                formData.append('phone', document.getElementById('phone').value);
+                formData.append('dob', document.getElementById('dob').value);
+                formData.append('address', document.getElementById('address').value);
+
+                const imageFile = document.getElementById('image').files[0];
+                if (imageFile) {
+                    formData.append('image', imageFile);
+                }
 
                 const updateResponse = await fetch(`/api/employees/${employeeId}`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(updatedEmployee)
+                    body: formData
                 });
 
                 if (updateResponse.ok) {
@@ -204,7 +202,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0 ;
+            margin: 0;
             padding: 0;
             background-color: #f4f4f4;
         }
@@ -217,13 +215,14 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .wrapper{
+
+        .wrapper {
             display: flex;
             justify-content: space-around;
             align-items: center;
         }
 
-        img{
+        img {
             height: 400px;
             width: 400px;
             box-shadow: 0 0 10px gray;
@@ -243,7 +242,6 @@
             padding: 30px 30px;
             border-radius: 1rem;
             background-color: rgba(218, 218, 218, 0.785);
-
         }
 
         label {
@@ -279,15 +277,18 @@
                 padding: 10px;
                 width: 80%;
             }
-            .wrapper{
+
+            .wrapper {
                 flex-direction: column;
             }
-            img{
+
+            img {
                 height: 80%;
                 width: 80%;
                 margin-bottom: 30px;
             }
-            form{
+
+            form {
                 width: 80%;
             }
         }
@@ -297,28 +298,29 @@
     <div class="container">
         <h1>Update Employee</h1>
         <div class="wrapper">
-            <img id="employee-image" src="" alt="Employee Image" >
+            <img id="employee-image" src="" alt="Employee Image">
             
-            <form id="update-form">
-                <!-- Removed update image section since it's not necessary for updating other employee data -->
-
+            <form id="update-form" enctype="multipart/form-data">
                 <label for="firstName">First Name</label>
-                <input type="text" id="firstName" name="firstName" >
+                <input type="text" id="firstName" name="firstName">
 
                 <label for="lastName">Last Name</label>
-                <input type="text" id="lastName" name="lastName" >
+                <input type="text" id="lastName" name="lastName">
                 
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" >
+                <input type="email" id="email" name="email">
 
                 <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" >
+                <input type="tel" id="phone" name="phone">
                 
                 <label for="dob">Date of Birth</label>
-                <input type="date" id="dob" name="dob" >
+                <input type="date" id="dob" name="dob">
 
                 <label for="address">Address</label>
                 <textarea name="address" id="address"></textarea>
+
+                <label for="image">Update Image</label>
+                <input type="file" id="image" name="image" accept="image/*">
                 
                 <button type="submit">Update Employee</button>
             </form>

@@ -74,12 +74,12 @@
 <body>
     <div class="header">
         <h1>Projects</h1>
-        <a href="index.html" class="back-button">Back</a>
+        <a href="/dashboard" class="back-button">Back</a>
     </div>
     <div class="container" id="projects-container"></div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            fetch('/api/projects') 
+            fetch('/api/projects')
                 .then(response => response.json())
                 .then(data => {
                     const projectsContainer = document.getElementById('projects-container');
@@ -97,31 +97,36 @@
                         const departmentInfo = document.createElement('p');
                         departmentInfo.textContent = `Department: ${project.departmentId.departmentName} (${project.departmentId.location})`;
                         
-                        const managerInfo = document.createElement('div');
-                        managerInfo.className = 'manager-info';
-                        
-                        const managerImage = document.createElement('img');
-                        managerImage.src = project.managerId.empImage;
-                        
-                        const managerDetails = document.createElement('div');
-                        const managerName = document.createElement('p');
-                        managerName.textContent = `Manager: ${project.managerId.name}`;
-                        
-                        const managerEmail = document.createElement('p');
-                        managerEmail.textContent = `Email: ${project.managerId.email}`;
-                        
-
-
-                        managerDetails.appendChild(managerName);
-                        managerDetails.appendChild(managerEmail);
-                        
-                        managerInfo.appendChild(managerImage);
-                        managerInfo.appendChild(managerDetails);
-                        
                         projectDiv.appendChild(projectName);
                         projectDiv.appendChild(projectDates);
                         projectDiv.appendChild(departmentInfo);
-                        projectDiv.appendChild(managerInfo);
+                        
+                        if (project.managerId) {
+                            const managerInfo = document.createElement('div');
+                            managerInfo.className = 'manager-info';
+                            
+                            const managerImage = document.createElement('img');
+                            managerImage.src = project.managerId.empImage;
+                            
+                            const managerDetails = document.createElement('div');
+                            const managerName = document.createElement('p');
+                            managerName.textContent = `Manager: ${project.managerId.firstName} ${project.managerId.lastName}`;
+                            
+                            const managerEmail = document.createElement('p');
+                            managerEmail.textContent = `Email: ${project.managerId.email}`;
+                            
+                            managerDetails.appendChild(managerName);
+                            managerDetails.appendChild(managerEmail);
+                            
+                            managerInfo.appendChild(managerImage);
+                            managerInfo.appendChild(managerDetails);
+                            
+                            projectDiv.appendChild(managerInfo);
+                        } else {
+                            const noManager = document.createElement('p');
+                            noManager.textContent = 'Manager: Not assigned';
+                            projectDiv.appendChild(noManager);
+                        }
                         
                         projectsContainer.appendChild(projectDiv);
                     });

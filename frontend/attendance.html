@@ -39,8 +39,7 @@
         .back-button:hover {
             background-color: #0056b3;
         }
-
-        .container{
+        .container {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
@@ -53,6 +52,7 @@
             margin-top: 20px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 300px;
         }
         .attendance-record h2 {
             margin-top: 0;
@@ -70,12 +70,19 @@
         .attendance-status.absent {
             color: red;
         }
+        .employee-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: block;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>Attendance Records</h1>
-        <a href="index.html" class="back-button">Back</a>
+        <a href="/dashboard" class="back-button">Back</a>
     </div>
     <div class="container" id="attendance-container"></div>
     <script>
@@ -90,18 +97,23 @@
                         attendanceDiv.className = 'attendance-record';
                         
                         const empName = document.createElement('h2');
-                        empName.textContent = record.employeeId.name;
-
                         const empImage = document.createElement('img');
-                        empImage.src = record.employeeId.empImage;
-                        empImage.alt = record.employeeId.name;
-                        empImage.style.width = '100px';
-                        empImage.style.height = '100px';
-                        empImage.style.borderRadius = '50%';
+                        
+                        if (record.employeeId) {
+                            empName.textContent = `${record.employeeId.firstName} ${record.employeeId.lastName}`;
+                            empImage.src = record.employeeId.empImage;
+                            empImage.alt = `${record.employeeId.firstName} ${record.employeeId.lastName}`;
+                        } else {
+                            empName.textContent = 'Unknown Employee';
+                            empImage.src = 'placeholder_image_url'; // Set a placeholder image URL if necessary
+                            empImage.alt = 'Unknown Employee';
+                        }
+
+                        empImage.className = 'employee-image';
 
                         const attendanceDetails = document.createElement('p');
                         attendanceDetails.innerHTML = `
-                            <strong>Email:</strong> ${record.employeeId.email}<br>
+                            <strong>Email:</strong> ${record.employeeId ? record.employeeId.email : 'N/A'}<br>
                             <strong>Date:</strong> ${new Date(record.date).toDateString()}<br>
                             <strong>Status:</strong> <span class="attendance-status ${record.status.toLowerCase()}">${record.status}</span><br>
                             <strong>Check-In Time:</strong> ${record.checkInTime ? record.checkInTime : 'N/A'}<br>
